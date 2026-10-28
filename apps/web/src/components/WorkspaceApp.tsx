@@ -25,7 +25,8 @@ import { QuickMemoSwitcher } from "./QuickMemoSwitcher";
 import { AppConfirmDialog, MemoDeleteConfirmDialog, NotebookNameDialog } from "./dialogs/ConfirmDialogs";
 import { PluginPanelDialog } from "./plugins/PluginPanelDialog";
 import { shouldDiscardPluginNoteSearchRequest } from "./editor/note-search";
-import { api, ApiRequestError, getOrCreateClientDeviceId } from "@/lib/api";
+import { api, ApiRequestError, getConfiguredDesktopApiBaseUrl, getOrCreateClientDeviceId } from "@/lib/api";
+import type { DesktopBackupStatus } from "@edgeever/shared";
 import { useShowDescendantNotesPreference } from "@/lib/descendant-notes-preference";
 import { MarkdownExportMemoryLimitError, type MarkdownExportProgress } from "@/lib/markdown-export";
 import { exportSelectedMemosAsMarkdownZip } from "@/lib/selected-markdown-export";
@@ -637,6 +638,27 @@ export const WorkspaceApp = ({
     });
   }, [invalidateWorkspaceQueries, repository, runQueuedSync, syncSummary.total]);
 
+  const refreshedBackupRestores = useRef(new Set<string>());
+  useEffect(() => {
+    const bridge = window.edgeeverDesktop;
+    if (!bridge?.backup || (authRequired && !user) || isLoggingOut) return;
+    let active = true;
+    const consume = (status: DesktopBackupStatus | null) => {
+      if (!active || !status?.lastRestoreAt || status.task || status.importError
+        || status.target.accountId !== (user?.id ?? "local")
+        || status.target.baseUrl !== getConfiguredDesktopApiBaseUrl()) return;
+      const key = `${status.backupSetId}:${status.lastRestoreAt}`;
+      if (refreshedBackupRestores.current.has(key)) return;
+      refreshedBackupRestores.current.add(key);
+      void refreshWorkspaceFromServer("manual").catch(() => {
+        if (active) setAppNoticeDialog({ title: t("desktopBackup.restoreTitle"), description: t("desktopBackup.restoreRefreshFailed") });
+      });
+    };
+    const unsubscribe = bridge.onBackupStatus(consume);
+    void bridge.backup("status").then(consume).catch(() => {});
+    return () => { active = false; unsubscribe(); };
+  }, [authRequired, user?.id, isLoggingOut, refreshWorkspaceFromServer, t]);
+
   const refreshLatestMemos = useCallback(async () => {
     if (isBrowserOffline()) {
       setIsOnline(false);
@@ -686,7 +708,9 @@ export const WorkspaceApp = ({
   const notebooks = notebooksQuery.data?.notebooks ?? [];
   useEffect(() => {
     const english = i18n.resolvedLanguage === "en-US";
-    const preferredNotebookId = english ? "nb_demo_features_en" : "nb_demo_features";
+    const preferredSlug = english ? "feature-demos" : "demo-features";
+    const preferredNotebookId = notebooks.find((notebook) => notebook.slug === preferredSlug)?.id
+      ?? (english ? "nb_demo_features_en" : "nb_demo_features");
 
     if (!notebooks.some((notebook) => notebook.id === preferredNotebookId)) {
       return;

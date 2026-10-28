@@ -1,26 +1,35 @@
 {
-  "version": "2.7.0",
+  "version": "2.11.0",
   "changes": {
     "en-US": [
-      "On the web and desktop apps, each notebook can set its own icon, icon color, text color, bold text, and an inverted icon or inverted row. Colors can be a preset or a six-digit HEX value. The settings are included in sync and backups. Existing notebooks keep their current appearance, and no manual migration is required. Thanks @thorufur for #673.",
-      "On the web and desktop apps, a tooltip closes as soon as the pointer leaves its trigger, including when the pointer moves onto the tooltip. Keyboard focus, Escape, and blur still dismiss it. Interactive hover cards stay as they are. Thanks @thorufur for #674.",
-      "On Android, the first share from another app reaches EdgeEver after the app process has already exited.",
-      "While the Android editor saves in the background, the Done button stays a label, and the status no longer cycles between Saving and Saved. Further typing starts the autosave wait again.",
-      "Saving a long Markdown note no longer freezes the server by reparsing the rest of the note."
+      "Desktop adds scheduled local backups, optional password encryption, recovery, and backup file management (#650; @sivdead, #684).",
+      "Single-note shares support readable custom addresses, with share actions wrapping on narrow windows (#691; @dkoryto, #692, #695).",
+      "Public share pages include note text directly and support Markdown access for readers and tools.",
+      "Android fullscreen image previews support swiping between images and avoid flashing the previous image (@CottonChou, #687).",
+      "Improve Android translations across the editor, AI assistant, settings, and update prompts (@dkoryto, #603).",
+      "Copy images and attachments directly from their editor menus.",
+      "System fonts follow the operating system locale for Han glyphs, improving Japanese and other text (#686).",
+      "Hide the image gallery editing toolbar in iOS view mode (@dkoryto, #689)."
     ],
     "zh-CN": [
-      "网页和桌面端的每个笔记本可以单独设置图标、图标颜色、文字颜色、粗体，以及只反转图标或反转整行。颜色可以选预设，也可以填写六位 HEX。这些设置会随同步和备份保存。已有笔记本保持原来的外观，不需要手动迁移。感谢 @thorufur（#673）。",
-      "网页和桌面端的悬停提示会在指针离开触发区域时马上关闭，指针移到提示上也会关闭。键盘聚焦、Escape 和失焦仍然会关闭提示。可以交互的悬停卡片保持原样。感谢 @thorufur（#674）。",
-      "Android 版在进程已经结束后，第一次从其他应用分享进来的内容可以进入 EdgeEver。",
-      "Android 编辑器在后台自动保存时，完成按钮保持文字，状态也不再在“保存中”和“已保存”之间来回切换。继续输入会重新等待自动保存。",
-      "保存较长的 Markdown 笔记时，服务端不再因重复解析整篇内容而卡住。"
+      "桌面端新增定时本地备份、可选密码加密与恢复，支持查看和管理备份文件（#650；@sivdead，#684）。",
+      "单篇笔记分享支持自定义易读地址，窄窗口下分享操作自动换行（#691；@dkoryto，#692、#695）。",
+      "公开分享页面直接提供笔记正文，并支持以 Markdown 读取，便于阅读和工具访问。",
+      "Android 全屏图片预览支持左右滑动切换，并修复切换时旧图片闪现（@CottonChou，#687）。",
+      "完善 Android 编辑器、AI 助手、设置与更新提示的多语言显示（@dkoryto，#603）。",
+      "编辑器图片和附件菜单新增复制功能，可直接复制内容或文件。",
+      "系统字体遵循操作系统语言选择汉字字形，改善日文等语言的显示（#686）。",
+      "修复 iOS 只读模式仍显示图片相册编辑工具栏的问题（@dkoryto，#689）。"
     ],
     "ja": [
-      "Web とデスクトップでは、各ノートブックにアイコン、アイコンの色、文字色、太字、アイコンのみまたは行全体の反転を設定できます。色はプリセットか 6 桁の HEX です。設定は同期とバックアップに含まれます。既存のノートブックの見た目はそのままで、手動の移行は不要です。@thorufur の貢献に感謝します（#673）。",
-      "Web とデスクトップでは、ポインタがトリガーを離れるとツールチップがすぐ閉じます。ヒントの上に移動した場合も閉じます。キーボードフォーカス、Escape、フォーカス解除でも閉じます。操作できるホバーカードはこれまでどおりです。@thorufur の貢献に感謝します（#674）。",
-      "Android では、アプリのプロセスが終了したあとの最初の共有も EdgeEver に届きます。",
-      "Android のエディタがバックグラウンドで保存するとき、完了ボタンは文字のままです。状態が「保存中」と「保存済み」の間で切り替わることもありません。入力を続けると自動保存の待ち時間がやり直されます。",
-      "長い Markdown ノートを保存しても、残りの本文を繰り返し解析してサーバーが固まることはありません。"
+      "デスクトップに定期ローカルバックアップ、任意のパスワード暗号化、復元とバックアップ管理を追加しました。",
+      "単一ノートの共有リンクにカスタムアドレスを設定でき、狭い画面でも共有操作を利用しやすくなりました。",
+      "公開共有ページにノート本文を直接含め、Markdownでの取得にも対応しました。",
+      "Androidの全画面画像プレビューで左右スワイプによる切り替えに対応し、直前の画像がちらつく問題を修正しました。",
+      "Androidのエディター、AIアシスタント、設定、更新通知の多言語表示を改善しました。",
+      "エディター内の画像や添付ファイルのメニューから直接コピーできるようになりました。",
+      "システムフォントの漢字字形をOSの言語設定に合わせ、日本語などの表示を改善しました。",
+      "iOSの閲覧モードで画像ギャラリーの編集ツールバーが表示される問題を修正しました。"
     ]
   }
 }
